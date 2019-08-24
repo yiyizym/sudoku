@@ -14,8 +14,8 @@ import { squares, digits, peers, units, rows, cols } from "./basics"
  * Convert grid into a dict of {square: char} with '0' or '.' for empties.
  * @param grid 
  */
-const getGridValues = (grid: string[]): boolean | { [key: string]: string } => {
-  let parsedGrid = grid.filter((v): boolean => v.match(/\d|\./) !== null)
+const getGridValues = (grid: string): boolean | { [key: string]: string } => {
+  let parsedGrid = grid.split('').filter((v): boolean => v.match(/\d|\./) !== null)
   if( parsedGrid.length !== 81) return false
   const result: { [key: string]: string } = {}
   squares.forEach((s,index) => {
@@ -62,7 +62,7 @@ const eliminate = (values: { [key: string]: string[] }, s: string, d: string): b
  * @param s 
  * @param d 
  */
-const assignValues = (values: { [key: string]: string[] }, s: string, d: string): boolean | { [key: string]: string[] } => {
+export const assignValues = (values: { [key: string]: string[] }, s: string, d: string): false | { [key: string]: string[] } => {
   let otherValues = values[s].filter((v): boolean => v !== d)
   if(otherValues.every((d2): boolean => eliminate(values, s, d2) !== false)) return values
   return false
@@ -73,9 +73,9 @@ const assignValues = (values: { [key: string]: string[] }, s: string, d: string)
     return False if a contradiction is detected.
  * @param grid 
  */
-const parseGrid = (grid: string[]): boolean|{[key: string]: string[]} => {
+export const parseGrid = (grid: string): false|{[key: string]: string[]} => {
   // To start, every square can be any digit; then assign values from the grid.
-  const values: { [key: string]: string[] } = squares.reduce((acc, curr) => acc[curr] = digits, {})
+  const values: { [key: string]: string[] } = squares.reduce((acc: {[key: string]: string[]}, curr) => acc[curr] = digits, {})
   const gridValues = getGridValues(grid)
   if(!gridValues) return false
   for (let [s, d] of Object.entries(gridValues)) {
