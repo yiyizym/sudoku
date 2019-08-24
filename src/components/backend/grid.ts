@@ -34,7 +34,6 @@ const getGridValue = (grid: string): boolean | { [key: string]: string } => {
 const eliminate = (values: ValueType, s: string, d: string): boolean | ValueType => {
   // Already eliminated
   if(!values[s].includes(d)) return values
-
   values[s] = values[s].filter((v): boolean => v !== d)
   if (values[s].length === 0) {
     return false // Contradiction: removed last value

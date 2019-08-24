@@ -20,7 +20,6 @@ export const squares = cross(rows, cols)
 
 const genUnitlist = (): string[][] => {
   let result: string[][] = []
-
   const _cols = cols.map(c => cross(rows, [c]))
   const _rows = rows.map(r => cross([r], cols))
   const rowGroup = [['A', 'B', 'C'], ['D', 'E', 'F'], ['G', 'H', 'I']]
@@ -32,7 +31,6 @@ const genUnitlist = (): string[][] => {
   result = result.concat(_cols)
   result = result.concat(_rows)
   result = result.concat(_squares)
-
   return result
 }
 
@@ -43,11 +41,9 @@ interface UnitType {
 }
 const genUnits = (): UnitType => {
   const result: UnitType = {}
-
   squares.forEach(s => {
     result[s] = unitlist.filter(u => u.includes(s))
   });
-
   return result
 }
 
@@ -56,13 +52,11 @@ export const units = genUnits()
 interface PeerType { [key: string]: Set<string> }
 const genPeers = (): PeerType => {
   const peers: PeerType = {}
-
   squares.forEach(s => {
     let flattened: Set<string> = new Set(units[s].reduce((acc, unit) => acc.concat(unit), []))
     flattened.delete(s)
     peers[s] = flattened
   });
-
   return peers
 }
 
