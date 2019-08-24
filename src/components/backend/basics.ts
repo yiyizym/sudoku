@@ -11,11 +11,11 @@
     values is a dict of possible values, e.g. { 'A1': '12349', 'A2': '8', ... }
  */
 
-const digits = '123456789'.split('')
-const rows = 'ABCDEFGHI'.split('')
-const cols = digits
+export const digits = '123456789'.split('')
+export const rows = 'ABCDEFGHI'.split('')
+export const cols = digits
 
-const cross = (A: string[], B: string[]): string[] => {
+export const cross = (A: string[], B: string[]): string[] => {
   const result: string[] = [];
   A.forEach(a => {
     B.forEach(b => {
@@ -25,27 +25,27 @@ const cross = (A: string[], B: string[]): string[] => {
   return result
 }
 
-const squares = cross(rows, cols)
+export const squares = cross(rows, cols)
 
 const genUnitlist = (): string[][] => {
-  const result: string[][] = []
+  let result: string[][] = []
 
   const _cols = cols.map(c => cross(rows, [c]))
   const _rows = rows.map(r => cross([r], cols))
   const rowGroup = [['A', 'B', 'C'], ['D', 'E', 'F'], ['G', 'H', 'I']]
   const colGroup = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9']]
-  const _squares: string[][] = []
+  let _squares: string[][] = []
   rowGroup.forEach(rs => {
-    _squares.concat(colGroup.map(cs => cross(rs, cs)))
+    _squares = _squares.concat(colGroup.map(cs => cross(rs, cs)))
   })
-  result.concat(_cols)
-  result.concat(_rows)
-  result.concat(_squares)
+  result = result.concat(_cols)
+  result = result.concat(_rows)
+  result = result.concat(_squares)
 
   return result
 }
 
-const unitlist: string[][] = genUnitlist()
+export const unitlist: string[][] = genUnitlist()
 
 interface UnitType {
   [key: string]: string[][]
@@ -60,7 +60,7 @@ const genUnits = (): UnitType => {
   return result
 }
 
-const units = genUnits()
+export const units = genUnits()
 
 interface PeerType { [key: string]: Set<string> }
 const genPeers = (): PeerType => {
@@ -75,4 +75,4 @@ const genPeers = (): PeerType => {
   return peers
 }
 
-const peers = genPeers()
+export const peers = genPeers()
