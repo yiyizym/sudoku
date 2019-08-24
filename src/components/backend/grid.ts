@@ -9,12 +9,12 @@
     values is a dict of possible values, e.g. { 'A1': '12349', 'A2': '8', ... }
  */
 
-import { squares, digits, peers, units, rows, cols } from "./basics"
+import { squares, digits, peers, units, rows, cols, initialValues, ValueType } from "./basics"
 /**
  * Convert grid into a dict of {square: char} with '0' or '.' for empties.
  * @param grid 
  */
-const getGridValues = (grid: string): boolean | { [key: string]: string } => {
+const getGridValue = (grid: string): boolean | { [key: string]: string } => {
   let parsedGrid = grid.split('').filter((v): boolean => v.match(/\d|\./) !== null)
   if( parsedGrid.length !== 81) return false
   const result: { [key: string]: string } = {}
@@ -31,7 +31,7 @@ const getGridValues = (grid: string): boolean | { [key: string]: string } => {
  * @param s 
  * @param d 
  */
-const eliminate = (values: { [key: string]: string[] }, s: string, d: string): boolean | { [key: string]: string[] } => {
+const eliminate = (values: ValueType, s: string, d: string): boolean | ValueType => {
   // Already eliminated
   if(!values[s].includes(d)) return values
 
@@ -49,7 +49,7 @@ const eliminate = (values: { [key: string]: string[] }, s: string, d: string): b
     if(!values[s].includes(d)) { return false }
     const dplaces = u
     if(dplaces.length === 1) {
-      if(assignValues(values, dplaces[0], d) === false) return false
+      if(assignValue(values, dplaces[0], d) === false) return false
     }
   });
   return values
@@ -62,7 +62,7 @@ const eliminate = (values: { [key: string]: string[] }, s: string, d: string): b
  * @param s 
  * @param d 
  */
-export const assignValues = (values: { [key: string]: string[] }, s: string, d: string): false | { [key: string]: string[] } => {
+export const assignValue = (values: ValueType, s: string, d: string): false | ValueType => {
   let otherValues = values[s].filter((v): boolean => v !== d)
   if(otherValues.every((d2): boolean => eliminate(values, s, d2) !== false)) return values
   return false
@@ -73,14 +73,14 @@ export const assignValues = (values: { [key: string]: string[] }, s: string, d: 
     return False if a contradiction is detected.
  * @param grid 
  */
-export const parseGrid = (grid: string): false|{[key: string]: string[]} => {
+export const parseGrid = (grid: string): false|ValueType => {
   // To start, every square can be any digit; then assign values from the grid.
-  const values: { [key: string]: string[] } = squares.reduce((acc: {[key: string]: string[]}, curr) => acc[curr] = digits, {})
-  const gridValues = getGridValues(grid)
-  if(!gridValues) return false
-  for (let [s, d] of Object.entries(gridValues)) {
+  const values = initialValues
+  const gridValue = getGridValue(grid)
+  if(!gridValue) return false
+  for (let [s, d] of Object.entries(gridValue)) {
     // (Fail if we can't assign d to square s.)
-    if(digits.includes(d) && assignValues(values, s, d) === false) return false
+    if(digits.includes(d) && assignValue(values, s, d) === false) return false
   }
   return values
 }

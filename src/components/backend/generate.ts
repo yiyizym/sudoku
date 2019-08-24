@@ -1,5 +1,5 @@
-import { squares, digits } from "./basics";
-import { assignValues } from "./grid";
+import { squares, initialValues } from "./basics";
+import { assignValue } from "./grid";
 /**
  * Make a random puzzle with N or more assignments. Restart on contradictions.
     Note the resulting puzzle is not guaranteed to be solvable, but empirically
@@ -37,14 +37,11 @@ const randomChoose = <T>(arr: Array<T>): T => {
  * @param assignments 
  */
 export const randomPuzzle = (assignments = 17): string => {
-  const values: { [key: string]: string[] }= squares.reduce((acc: { [key: string]: any },curr) => {
-    acc[curr] = digits
-    return acc;
-  },{})
+  const values = initialValues
   const squaresShuffled = shuffle(squares)
   for (let i = 0; i < squaresShuffled.length; i++) {
     const s = squaresShuffled[i];
-    if (assignValues(values, s, randomChoose<string>(values[s])) === false) break;
+    if (assignValue(values, s, randomChoose<string>(values[s])) === false) break;
     const ds = squares.map(s => values[s]).filter(el => el.length === 1)
     // with less than 17 squares filled in or less than 8 different digits 
     // it is known that there will be duplicate solutions.

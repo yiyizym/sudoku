@@ -67,3 +67,15 @@ const genPeers = (): PeerType => {
 }
 
 export const peers = genPeers()
+
+export interface ValueType {
+  [key: string]: string[]
+}
+
+const initValues = (): ValueType => {
+  return squares.reduce((acc: ValueType, curr) => 
+    acc[curr] = digits
+  , {})
+}
+
+export const initialValues = initValues()
