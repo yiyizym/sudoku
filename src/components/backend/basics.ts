@@ -66,10 +66,9 @@ export interface ValueType {
   [key: string]: string[]
 }
 
-const initValues = (): ValueType => {
-  return squares.reduce((acc: ValueType, curr) => 
+export const initValues = (): ValueType => {
+  return squares.reduce((acc: ValueType, curr) => {
     acc[curr] = digits
-  , {})
+    return acc
+  }, {})
 }
-
-export const initialValues = initValues()

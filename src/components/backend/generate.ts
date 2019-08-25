@@ -1,4 +1,4 @@
-import { squares, initialValues } from "./basics";
+import { squares, initValues } from "./basics";
 import { assignValue } from "./grid";
 /**
  * Make a random puzzle with N or more assignments. Restart on contradictions.
@@ -37,7 +37,7 @@ const randomChoose = <T>(arr: Array<T>): T => {
  * @param assignments 
  */
 export const randomPuzzle = (assignments = 17): string => {
-  const values = initialValues
+  const values = initValues()
   const squaresShuffled = shuffle(squares)
   for (let i = 0; i < squaresShuffled.length; i++) {
     const s = squaresShuffled[i];

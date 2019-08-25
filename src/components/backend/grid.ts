@@ -9,7 +9,7 @@
     values is a dict of possible values, e.g. { 'A1': '12349', 'A2': '8', ... }
  */
 
-import { squares, digits, peers, units, rows, cols, initialValues, ValueType } from "./basics"
+import { squares, digits, peers, units, rows, cols, initValues, ValueType } from "./basics"
 /**
  * Convert grid into a dict of {square: char} with '0' or '.' for empties.
  * @param grid 
@@ -74,7 +74,7 @@ export const assignValue = (values: ValueType, s: string, d: string): false | Va
  */
 export const parseGrid = (grid: string): false|ValueType => {
   // To start, every square can be any digit; then assign values from the grid.
-  const values = initialValues
+  const values = initValues()
   const gridValue = getGridValue(grid)
   if(!gridValue) return false
   for (let [s, d] of Object.entries(gridValue)) {
@@ -88,7 +88,7 @@ export const parseGrid = (grid: string): false|ValueType => {
  * Display these values as a 2-D grid.
  * @param values 
  */
-const displayGrid = (values: { [key: string]: string[]}): void => {
+export const displayGrid = (values: { [key: string]: string[]}): void => {
   const width = Math.max.apply(Math, squares.map(s => values[s].length)) + 1
   const line: string = Array(3).fill('_'.repeat(width * 3)).join('+')
   rows.forEach(r => {
