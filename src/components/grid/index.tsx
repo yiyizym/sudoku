@@ -3,7 +3,7 @@ import Tile from "./tile";
 import { ValueType } from "../backend/basics";
 
 interface GridType {
-  values: ValueType;
+  values: false|ValueType;
 }
 
 class Grid extends React.Component<GridType, {}> {
@@ -18,8 +18,9 @@ class Grid extends React.Component<GridType, {}> {
       />
     })
   }
-  render(): JSX.Element {
-    return (<div
+  render(): JSX.Element|null {
+    const { values } = this.props
+    return values ? (<div
       style={{
         width: 800,
         height: 800,
@@ -28,7 +29,7 @@ class Grid extends React.Component<GridType, {}> {
       }}
     >
       {this.genTiles()}
-    </div>)
+    </div>) : null
   }
 }
 
