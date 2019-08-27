@@ -7,13 +7,15 @@ import NumberPanel from './components/numberPanel';
 
 interface AppState {
   grid: string;
-  initialValues: { [key: string]: string[]}
+  initialValues: { [key: string]: string[]};
+  numberChosen: string;
 }
 
 class App extends React.Component<{},AppState>{
   public state = {
     grid: '',
-    initialValues: {}
+    initialValues: {},
+    numberChosen: '',
   }
 
 
@@ -61,7 +63,8 @@ class App extends React.Component<{},AppState>{
       />
       <NumberPanel 
         toFillCount={this.getToFillCount()}
-        selectNumber={(num: string) => console.log(num)}
+        numberChosen={this.state.numberChosen}
+        selectNumber={(num: string) => this.setState({numberChosen: num})}
       />
       </div>)
   }
