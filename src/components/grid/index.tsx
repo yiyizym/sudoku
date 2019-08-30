@@ -4,9 +4,16 @@ import { ValueType } from "../backend/basics";
 
 interface GridType {
   values: false|ValueType;
+  fillNumber: (num: string) => void
 }
 
 class Grid extends React.Component<GridType, {}> {
+  private checkAndSetDigit(digit: string): void {
+    if (false) {
+      return
+    }
+    this.props.fillNumber(digit)
+  }
   private genTiles(): JSX.Element[] {
     const keyValuePairs = Object.entries(this.props.values)
     return Array.from({ length: 81 }, (_, index): JSX.Element => {
@@ -14,7 +21,7 @@ class Grid extends React.Component<GridType, {}> {
         key={index}
         id={keyValuePairs[index][0]}
         digit={keyValuePairs[index][1].length > 1 ? '' : keyValuePairs[index][1][0]}
-        setDigit={() => { }}
+        setDigit={this.checkAndSetDigit}
       />
     })
   }

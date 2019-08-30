@@ -60,6 +60,7 @@ class App extends React.Component<{},AppState>{
     >
       <Grid
         values={values}
+        fillNumber={() => {}}
       />
       <NumberPanel 
         toFillCount={this.getToFillCount()}
