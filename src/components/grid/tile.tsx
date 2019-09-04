@@ -7,12 +7,13 @@ interface TileProps {
   // hilight: boolean; // 是否高亮
   // from: string; // 用户填写/系统生成
   // borders: [boolean, boolean, boolean, boolean];
-  setDigit: (id: string) => void
+  setDigit: (id: string) => void;
 }
 
 class Tile extends React.Component<TileProps, {}> {
-  private triggerClick = (): void => {
-    this.props.setDigit(this.props.id)
+  private mayTriggerClick = (): void => {
+    const { id, digit } = this.props
+    digit === '' && this.props.setDigit(id)
   }
   render(): JSX.Element {
     const { digit } = this.props
@@ -26,7 +27,7 @@ class Tile extends React.Component<TileProps, {}> {
         border: '1px solid black',
         // color: from === 'system' ? 'grey' : 'red'
       }}
-      onClick={() => this.triggerClick()}
+      onClick={() => this.mayTriggerClick()}
     >
       {digit}
     </div>)

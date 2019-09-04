@@ -3,19 +3,19 @@ import './App.css';
 import Grid from "./components/grid";
 import { randomPuzzle } from "./components/backend/index";
 import { parseGrid } from "./components/backend/grid";
-import NumberPanel from './components/numberPanel';
+import DigitPanel from './components/digitPanel';
 
 interface AppState {
   grid: string;
   initialValues: { [key: string]: string[]};
-  numberChosen: string;
+  digitChosen: string;
 }
 
 class App extends React.Component<{},AppState>{
   public state = {
     grid: '',
     initialValues: {},
-    numberChosen: '',
+    digitChosen: '',
   }
 
 
@@ -43,9 +43,9 @@ class App extends React.Component<{},AppState>{
     Object.values<string[]>(this.state.initialValues)
       .forEach(
         (values: string[]): void => {
-        const num = values.length === 1 ? values[0] : '0'
-        if(num in map) {
-          map[num as keyof typeof map] -= 1
+        const digit = values.length === 1 ? values[0] : '0'
+        if(digit in map) {
+          map[digit as keyof typeof map] -= 1
         }
       })
     return map
@@ -60,12 +60,13 @@ class App extends React.Component<{},AppState>{
     >
       <Grid
         values={values}
-        fillNumber={() => {}}
+        digitChosen={this.state.digitChosen}
+        fillDigit={(...args) => { console.log(...args) }}
       />
-      <NumberPanel 
+      <DigitPanel 
         toFillCount={this.getToFillCount()}
-        numberChosen={this.state.numberChosen}
-        selectNumber={(num: string) => this.setState({numberChosen: num})}
+        digitChosen={this.state.digitChosen}
+        selectDigit={(digit: string) => this.setState({digitChosen: digit})}
       />
       </div>)
   }
