@@ -10,7 +10,7 @@ interface DigitPanelProps {
 class DigitPanel extends React.Component<DigitPanelProps,{}> {
 
   private generateDigits(): JSX.Element[] {
-    const { toFillCount, selectDigit: selectDigit, digitChosen: digitChosen } = this.props
+    const { toFillCount, selectDigit, digitChosen } = this.props
     const digitCounts = Object.entries(toFillCount)
     return digitCounts.map(([digit, count]) => {
       return <div

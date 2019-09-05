@@ -1,19 +1,23 @@
 import React from "react";
 import Tile from "./tile";
 import { ValueType } from "../backend/basics";
+import { assignValue } from "../backend";
 
 interface GridType {
   values: false|ValueType;
   digitChosen: string;
-  fillDigit: (id: string, digit: string) => void
+  fillDigit: (id: string, digit: string, value: ValueType) => void
 }
 
 class Grid extends React.Component<GridType, {}> {
   private checkAndSetDigit = (id: string): void => {
-    if (false) {
+    const { values, digitChosen } = this.props
+    const newValues = assignValue(JSON.parse(JSON.stringify(values)), id, digitChosen)
+    if (!newValues) {
+      console.log('choose wrong digit')
       return
     }
-    this.props.fillDigit(id, this.props.digitChosen)
+    this.props.fillDigit(id, this.props.digitChosen, newValues)
   }
   private genTiles(): JSX.Element[] {
     const keyValuePairs = Object.entries(this.props.values)
