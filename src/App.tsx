@@ -8,14 +8,16 @@ import DigitPanel from './components/digitPanel';
 interface AppState {
   grid: string;
   initialValues: { [key: string]: string[]};
+  currentValues: { [key: string]: string[]};
   digitChosen: string;
 }
 
 class App extends React.Component<{},AppState>{
   public state = {
     grid: '',
-    initialValues: {},
     digitChosen: '',
+    initialValues: {},
+    currentValues: {},
   }
 
 
@@ -24,7 +26,8 @@ class App extends React.Component<{},AppState>{
     const initialValues = parseGrid(grid)
     this.setState({
       grid: grid,
-      initialValues: initialValues ? initialValues : {}
+      initialValues: initialValues ? initialValues : {},
+      currentValues: initialValues ? initialValues : {}
     })
   }
 
@@ -52,14 +55,13 @@ class App extends React.Component<{},AppState>{
   }
 
   render(): JSX.Element|null {
-    const values = parseGrid(this.state.grid)
     return (<div
       style={{
         display: 'flex',
       }}
     >
       <Grid
-        values={values}
+        values={this.state.currentValues}
         digitChosen={this.state.digitChosen}
         fillDigit={(...args) => { console.log(...args) }}
       />
