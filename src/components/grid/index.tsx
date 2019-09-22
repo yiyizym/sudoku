@@ -28,6 +28,7 @@ class Grid extends React.Component<GridType, {}> {
       return <Tile
         key={index}
         id={id}
+        digitChosen={this.props.digitChosen}
         digit={digits.length > 1 ? '' : digits[0]}
         setDigit={this.checkAndSetDigit}
       />
