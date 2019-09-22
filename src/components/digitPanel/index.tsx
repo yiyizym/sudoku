@@ -15,7 +15,7 @@ class DigitPanel extends React.Component<DigitPanelProps,{}> {
     return digitCounts.map(([digit, count]) => {
       return <div
         key={digit}
-        className={`${digit === digitChosen ? 'selected' : ''}`}
+        className={`digit-panel-item ${digit === digitChosen ? 'selected' : ''}`}
         onClick={() => selectDigit(digit)}
       >
         {`${digit}: ${count}`}
