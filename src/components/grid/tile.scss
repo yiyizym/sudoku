@@ -1,11 +1,15 @@
+$lightBG: rgba(243, 202, 131, 0.36);
+$darkBG: rgba(248, 159, 5, 0.36);
+
 .tile {
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  width: 11.1%;
-  height: 11.1%;
+  width: 11.11%;
+  height: 11.11%;
+  flex-grow: 1;
 }
 
 .tile-A1,
@@ -53,7 +57,7 @@
 .tile-F4,
 .tile-F5,
 .tile-F6 {
-  background: rgba(243, 202, 131, 0.36);
+  background: $lightBG;
 }
 
 .tile-A4,
@@ -92,5 +96,5 @@
 .tile-I4,
 .tile-I5,
 .tile-I6 {
-  background: rgba(248, 159, 5, 0.36);
+  background: $darkBG;
 }
