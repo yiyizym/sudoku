@@ -21,8 +21,12 @@ class App extends React.Component<{},AppState>{
     currentValues: {},
   }
 
-  private updateValues = (value: ValueType): void => {
-    this.setState({ currentValues: value })
+  private updateValues = (id: string, digitChosen: string): void => {
+    const newValues = {
+      ...this.state.currentValues,
+      [id]: [digitChosen]
+    }
+    this.setState({ currentValues: newValues })
   }
 
 

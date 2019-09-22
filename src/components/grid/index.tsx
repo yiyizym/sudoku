@@ -7,18 +7,18 @@ import _ from "lodash";
 interface GridType {
   values: false|ValueType;
   digitChosen: string;
-  updateValues: (value: ValueType) => void
+  updateValues: (id: string, digitChosen: string) => void
 }
 
 class Grid extends React.Component<GridType, {}> {
   private checkAndSetDigit = (id: string): void => {
     const { values, digitChosen } = this.props
-    const newValues = assignValue(JSON.parse(JSON.stringify(values)), id, digitChosen)
-    if (!newValues) {
+    const valid = assignValue(JSON.parse(JSON.stringify(values)), id, digitChosen)
+    if (!valid) {
       console.log('choose wrong digit')
       return
     }
-    this.props.updateValues(newValues)
+    this.props.updateValues(id, digitChosen)
   }
   private genTiles(): JSX.Element[] {
     const keyValuePairs = Object.entries(this.props.values)
