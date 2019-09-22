@@ -63,6 +63,8 @@ class App extends React.Component<{},AppState>{
     return (<div
       style={{
         display: 'flex',
+        justifyContent: 'space-around',
+        paddingTop: 100
       }}
     >
       <Grid

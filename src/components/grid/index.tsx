@@ -40,7 +40,8 @@ class Grid extends React.Component<GridType, {}> {
         width: 800,
         height: 800,
         display: "flex",
-        flexWrap: "wrap"
+        flexWrap: "wrap",
+        border: "1px solid #ccc",
       }}
     >
       {this.genTiles()}

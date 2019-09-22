@@ -1,4 +1,5 @@
 import React from 'react';
+import './tile.scss'
 
 interface TileProps {
   id: string;
@@ -16,17 +17,9 @@ class Tile extends React.Component<TileProps, {}> {
     digit === '' && this.props.setDigit(id)
   }
   render(): JSX.Element {
-    const { digit } = this.props
+    const { digit, id } = this.props
     return (<div
-      style={{ 
-        boxSizing: 'border-box',
-        width: '11.1%',
-        height: '11.1%',
-        flexShrink: 0,
-        display: 'flex',
-        border: '1px solid black',
-        // color: from === 'system' ? 'grey' : 'red'
-      }}
+      className={`tile tile-${id}`}
       onClick={() => this.mayTriggerClick()}
     >
       {digit}
