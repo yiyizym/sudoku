@@ -4,11 +4,12 @@ import Grid from "./components/grid";
 import { randomPuzzle } from "./components/backend/index";
 import { parseGrid } from "./components/backend/grid";
 import DigitPanel from './components/digitPanel';
+import { ValueType } from './components/backend/basics';
 
 interface AppState {
   grid: string;
-  initialValues: { [key: string]: string[]};
-  currentValues: { [key: string]: string[]};
+  initialValues: ValueType;
+  currentValues: ValueType;
   digitChosen: string;
 }
 
@@ -20,9 +21,13 @@ class App extends React.Component<{},AppState>{
     currentValues: {},
   }
 
+  private updateValues = (value: ValueType): void => {
+    this.setState({ currentValues: value })
+  }
+
 
   public componentDidMount(): void {
-    const grid = randomPuzzle()
+    const grid = randomPuzzle(29)
     const initialValues = parseGrid(grid)
     this.setState({
       grid: grid,
@@ -63,7 +68,7 @@ class App extends React.Component<{},AppState>{
       <Grid
         values={this.state.currentValues}
         digitChosen={this.state.digitChosen}
-        fillDigit={(...args) => { console.log(...args) }}
+        updateValues={this.updateValues}
       />
       <DigitPanel 
         toFillCount={this.getToFillCount()}

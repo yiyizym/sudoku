@@ -7,7 +7,7 @@ import _ from "lodash";
 interface GridType {
   values: false|ValueType;
   digitChosen: string;
-  fillDigit: (id: string, digit: string, value: ValueType) => void
+  updateValues: (value: ValueType) => void
 }
 
 class Grid extends React.Component<GridType, {}> {
@@ -18,7 +18,7 @@ class Grid extends React.Component<GridType, {}> {
       console.log('choose wrong digit')
       return
     }
-    this.props.fillDigit(id, this.props.digitChosen, newValues)
+    this.props.updateValues(newValues)
   }
   private genTiles(): JSX.Element[] {
     const keyValuePairs = Object.entries(this.props.values)
