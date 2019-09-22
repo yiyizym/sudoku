@@ -1,10 +1,10 @@
 import React from 'react';
-import './App.css';
 import Grid from "./components/grid";
 import { randomPuzzle } from "./components/backend/index";
 import { parseGrid } from "./components/backend/grid";
 import DigitPanel from './components/digitPanel';
 import { ValueType } from './components/backend/basics';
+import GamePanel from './components/gamePanel';
 
 interface AppState {
   grid: string;
@@ -27,6 +27,10 @@ class App extends React.Component<{},AppState>{
 
 
   public componentDidMount(): void {
+    this.initGame()
+  }
+
+  private initGame = (): void => {
     const grid = randomPuzzle(29)
     const initialValues = parseGrid(grid)
     this.setState({
@@ -48,7 +52,7 @@ class App extends React.Component<{},AppState>{
       '8': 9,
       '9': 9
     };
-    Object.values<string[]>(this.state.initialValues)
+    Object.values<string[]>(this.state.currentValues)
       .forEach(
         (values: string[]): void => {
         const digit = values.length === 1 ? values[0] : '0'
@@ -67,6 +71,9 @@ class App extends React.Component<{},AppState>{
         paddingTop: 100
       }}
     >
+      <GamePanel
+        initGame={this.initGame}
+       />
       <Grid
         values={this.state.currentValues}
         digitChosen={this.state.digitChosen}
