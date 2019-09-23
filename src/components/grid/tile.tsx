@@ -24,7 +24,7 @@ class Tile extends React.Component<TileProps, {}> {
     digit === '' && this.props.setDigit(id)
   }
   render(): JSX.Element {
-    const { digit, id } = this.props
+    const { digit } = this.props
     return (<div
       className={this.getTileClass()}
       onClick={() => this.mayTriggerClick()}

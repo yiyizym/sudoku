@@ -1,5 +1,6 @@
-import { squares, initValues } from "./basics";
+import { squares, initValues, ValueType } from "./basics";
 import { assignValue } from "./grid";
+import { solve } from ".";
 /**
  * Make a random puzzle with N or more assignments. Restart on contradictions.
     Note the resulting puzzle is not guaranteed to be solvable, but empirically
@@ -52,4 +53,17 @@ export const randomPuzzle = (assignments = 17): string => {
     }
   }
   return randomPuzzle(assignments)
+}
+
+export const generate = (assignments = 17): { puzzle: string; solved: ValueType } => {
+  const puzzle = randomPuzzle(assignments)
+  const solved = solve(puzzle)
+  if(solved) {
+    return {
+      puzzle,
+      solved
+    }
+  } else {
+    return  generate(assignments)
+  }
 }

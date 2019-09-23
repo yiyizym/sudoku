@@ -6,14 +6,15 @@ import _ from "lodash";
 
 interface GridType {
   values: false|ValueType;
+  solved: ValueType;
   digitChosen: string;
   updateValues: (id: string, digitChosen: string) => void
 }
 
 class Grid extends React.Component<GridType, {}> {
   private checkAndSetDigit = (id: string): void => {
-    const { values, digitChosen } = this.props
-    const valid = assignValue(JSON.parse(JSON.stringify(values)), id, digitChosen)
+    const { solved, digitChosen } = this.props
+    const valid = digitChosen === solved[id][0]
     if (!valid) {
       console.log('choose wrong digit')
       return
