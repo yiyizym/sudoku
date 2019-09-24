@@ -18,7 +18,7 @@ class DigitPanel extends React.Component<DigitPanelProps,{}> {
         className={`digit-panel-item ${digit === digitChosen ? 'selected' : ''}`}
         onClick={() => selectDigit(digit)}
       >
-        {`${digit}: ${count}`}
+        {count ? Array.from({ length: count }, ():string => digit).join(' ') : null}
       </div>
     })
   }
