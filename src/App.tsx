@@ -1,13 +1,12 @@
 import React from 'react';
 import Grid from "./components/grid";
-import { parseGrid } from "./components/backend/grid";
 import DigitPanel from './components/digitPanel';
 import { ValueType } from './components/backend/basics';
 import GamePanel from './components/gamePanel';
 import { generate } from './components/backend/generate';
+import { digits } from './components/backend/basics'
 
 interface AppState {
-  grid: string;
   initialValues: ValueType;
   currentValues: ValueType;
   digitChosen: string;
@@ -15,8 +14,7 @@ interface AppState {
 }
 
 class App extends React.Component<{},AppState>{
-  public state = {
-    grid: '',
+  public state: AppState = {
     digitChosen: '',
     initialValues: {},
     currentValues: {},
@@ -36,11 +34,22 @@ class App extends React.Component<{},AppState>{
     this.initGame()
   }
 
+  private pickValues = (solved: ValueType): ValueType =>{
+    const pickedValue: ValueType = {}
+    for (const key in solved) {
+      if (solved.hasOwnProperty(key)) {
+        // 30 / 81
+        const unSeal = Math.random() > 0.55
+        pickedValue[key] = unSeal ? solved[key] : digits
+      }
+    }
+    return pickedValue
+  } 
+ 
   private initGame = (): void => {
-    const {puzzle, solved} = generate(30)
-    const initialValues = parseGrid(puzzle)
+    const solved = generate(30)
+    const initialValues = this.pickValues(solved)
     this.setState({
-      grid: puzzle,
       initialValues: initialValues ? initialValues : {},
       currentValues: initialValues ? initialValues : {},
       solved: solved

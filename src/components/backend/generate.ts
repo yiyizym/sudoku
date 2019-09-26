@@ -55,14 +55,11 @@ export const randomPuzzle = (assignments = 17): string => {
   return randomPuzzle(assignments)
 }
 
-export const generate = (assignments = 17): { puzzle: string; solved: ValueType } => {
+export const generate = (assignments: number): ValueType => {
   const puzzle = randomPuzzle(assignments)
   const solved = solve(puzzle)
   if(solved) {
-    return {
-      puzzle,
-      solved
-    }
+    return solved
   } else {
     return  generate(assignments)
   }
