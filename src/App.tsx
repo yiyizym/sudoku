@@ -21,12 +21,22 @@ class App extends React.Component<{},AppState>{
     solved: {}
   }
 
-  private updateValues = (id: string, digitChosen: string): void => {
+  private updateValues = (id: string): void => {
     const newValues = {
       ...this.state.currentValues,
-      [id]: [digitChosen]
+      [id]: [this.state.digitChosen]
     }
     this.setState({ currentValues: newValues })
+  }
+
+  private checkAndSetDigit = (id: string): void => {
+    const { solved, digitChosen } = this.state
+    const valid = digitChosen === solved[id][0]
+    if (!valid) {
+      console.log('choose wrong digit')
+      return
+    }
+    this.updateValues(id)
   }
 
 
@@ -92,9 +102,9 @@ class App extends React.Component<{},AppState>{
        />
       <Grid
         values={this.state.currentValues}
-        solved={this.state.solved}
         digitChosen={this.state.digitChosen}
         updateValues={this.updateValues}
+        checkAndSetDigit={this.checkAndSetDigit}
       />
       <DigitPanel 
         toFillCount={this.getToFillCount()}

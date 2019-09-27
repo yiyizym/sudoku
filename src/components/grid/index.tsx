@@ -6,21 +6,12 @@ import _ from "lodash";
 
 interface GridType {
   values: false|ValueType;
-  solved: ValueType;
   digitChosen: string;
+  checkAndSetDigit: (id: string) => void;
   updateValues: (id: string, digitChosen: string) => void
 }
 
 class Grid extends React.Component<GridType, {}> {
-  private checkAndSetDigit = (id: string): void => {
-    const { solved, digitChosen } = this.props
-    const valid = digitChosen === solved[id][0]
-    if (!valid) {
-      console.log('choose wrong digit')
-      return
-    }
-    this.props.updateValues(id, digitChosen)
-  }
   private genTiles(): JSX.Element[] {
     const keyValuePairs = Object.entries(this.props.values)
     return Array.from({ length: 81 }, (_, index): JSX.Element => {
@@ -31,7 +22,7 @@ class Grid extends React.Component<GridType, {}> {
         id={id}
         digitChosen={this.props.digitChosen}
         digit={digits.length > 1 ? '' : digits[0]}
-        setDigit={this.checkAndSetDigit}
+        setDigit={this.props.checkAndSetDigit}
       />
     })
   }
