@@ -5,6 +5,7 @@ import { ValueType } from './components/backend/basics';
 import GamePanel from './components/gamePanel';
 import { generate } from './components/backend/generate';
 import { digits } from './components/backend/basics'
+import { search } from './components/backend/solve';
 
 interface AppState {
   initialValues: ValueType;
@@ -29,14 +30,22 @@ class App extends React.Component<{},AppState>{
     this.setState({ currentValues: newValues })
   }
 
+  private checkPosibility = (id: string): boolean => {
+    const posibleValues = {
+      ...this.state.currentValues,
+      [id]: [this.state.digitChosen]
+    }
+    return  !!search(posibleValues)
+  }
+
   private checkAndSetDigit = (id: string): void => {
     const { solved, digitChosen } = this.state
     const valid = digitChosen === solved[id][0]
-    if (!valid) {
-      console.log('choose wrong digit')
+    if (valid || this.checkPosibility(id)) { // checkPosibility 性能差，只有当 valid 为 falsy 时才触发
+      this.updateValues(id)
       return
     }
-    this.updateValues(id)
+    console.log('choose wrong digit')
   }
 
 

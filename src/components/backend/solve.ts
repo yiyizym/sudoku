@@ -7,7 +7,7 @@ const some = (seq: Array<false | ValueType>): false | ValueType => {
   return false
 }
 
-const search = (values: false|ValueType): false | ValueType => {
+export const search = (values: false|ValueType): false | ValueType => {
   if(values === false) { return false; }
   if (squares.every(s => values[s].length === 1)) return values // Solved!
   // Chose the unfilled square s with the fewest possibilities
