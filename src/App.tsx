@@ -25,6 +25,17 @@ class App extends React.Component<{},AppState>{
     solved: {}
   }
 
+
+  private toggleMode = (e: KeyboardEvent): any => {
+    switch (e.code) {
+      case 'Space':
+        this.setState({ mode: this.state.mode === 'fill' ? 'note' : 'fill' });
+        break;
+      default:
+        break;
+    }
+  }
+
   private updateValues = (id: string): void => {
     const newValues = {
       ...this.state.currentValues,
@@ -54,6 +65,11 @@ class App extends React.Component<{},AppState>{
 
   public componentDidMount(): void {
     this.initGame()
+    this.listenToKeyPress()
+  }
+
+  public componentWillUnmount(): void {
+    this.unListenToKeyPress()
   }
 
   private pickValues = (solved: ValueType): ValueType =>{
@@ -75,6 +91,16 @@ class App extends React.Component<{},AppState>{
       currentValues: initialValues ? initialValues : {},
       solved: solved
     })
+  }
+
+  private listenToKeyPress = (): void => {
+    const body = document.querySelector('body') as HTMLBodyElement
+    body.addEventListener('keypress', this.toggleMode)
+  }
+  
+  private unListenToKeyPress = (): void => {
+    const body = document.querySelector('body') as HTMLBodyElement
+    body.removeEventListener('keypress', this.toggleMode)
   }
 
   private getToFillCount(): { [key: string]: number } {

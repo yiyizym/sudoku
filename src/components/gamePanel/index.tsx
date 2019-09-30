@@ -9,21 +9,16 @@ interface GamePanelProps {
 
 class GamePanel extends React.PureComponent<GamePanelProps> {
   public render = (): JSX.Element => {
-    const { mode, initGame, changeMode } = this.props;
+    const { mode, initGame } = this.props;
     return (<div
       style={{
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        width: '10vh'
       }}
     >
+      <span>mode: {mode}</span>
       <button onClick={initGame}>(Re)Play</button>
-      <select
-        value={mode}
-        onChange={(e): void => changeMode(e.target.value as Mode)}
-      >
-        <option value="fill">fill mode</option>
-        <option value="note">note mode</option>
-      </select>
     </div>)
   }
 }
