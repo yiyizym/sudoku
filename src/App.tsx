@@ -6,8 +6,10 @@ import GamePanel from './components/gamePanel';
 import { generate } from './components/backend/generate';
 import { digits } from './components/backend/basics'
 import { search } from './components/backend/solve';
+import { Mode } from './schema'
 
 interface AppState {
+  mode: Mode;
   initialValues: ValueType;
   currentValues: ValueType;
   digitChosen: string;
@@ -16,6 +18,7 @@ interface AppState {
 
 class App extends React.Component<{},AppState>{
   public state: AppState = {
+    mode: 'fill',
     digitChosen: '',
     initialValues: {},
     currentValues: {},
@@ -57,8 +60,7 @@ class App extends React.Component<{},AppState>{
     const pickedValue: ValueType = {}
     for (const key in solved) {
       if (solved.hasOwnProperty(key)) {
-        // 30 / 81
-        const unSeal = Math.random() > 0.55
+        const unSeal = Math.random() > 0.60
         pickedValue[key] = unSeal ? solved[key] : digits
       }
     }
@@ -99,28 +101,35 @@ class App extends React.Component<{},AppState>{
   }
 
   render(): JSX.Element|null {
-    return (<div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-        paddingTop: '10vh'
-      }}
-    >
-      <GamePanel
-        initGame={this.initGame}
-       />
-      <Grid
-        values={this.state.currentValues}
-        digitChosen={this.state.digitChosen}
-        updateValues={this.updateValues}
-        checkAndSetDigit={this.checkAndSetDigit}
-      />
-      <DigitPanel 
-        toFillCount={this.getToFillCount()}
-        digitChosen={this.state.digitChosen}
-        selectDigit={(digit: string) => this.setState({digitChosen: digit})}
-      />
-      </div>)
+    const { mode, currentValues, digitChosen } = this.state
+    
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          paddingTop: '10vh'
+        }}
+      >
+        <GamePanel
+          mode={mode}
+          changeMode={(mode: Mode): void => this.setState({ mode })}
+          initGame={this.initGame}
+        />
+        <Grid
+          values={currentValues}
+          mode={mode}
+          digitChosen={digitChosen}
+          updateValues={this.updateValues}
+          checkAndSetDigit={this.checkAndSetDigit}
+        />
+        <DigitPanel 
+          toFillCount={this.getToFillCount()}
+          digitChosen={digitChosen}
+          selectDigit={(digit: string) => this.setState({digitChosen: digit})}
+        />
+      </div>
+    )
   }
 }
 

@@ -1,5 +1,6 @@
 $lightBG: rgba(243, 202, 131, 0.36);
 $darkBG: rgba(248, 159, 5, 0.36);
+$noteColor: #291919;
 
 .tile {
   box-sizing: border-box;
@@ -110,4 +111,39 @@ $darkBG: rgba(248, 159, 5, 0.36);
 .tile-I5,
 .tile-I6 {
   background: $darkBG;
+}
+
+.tile-noted {
+  flex-wrap: wrap;
+
+  &>div {
+    flex-basis: 33.3%;
+    height: 33.3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: transparent;
+    font-size: 10px;
+  }
+
+  &.tile-note-mode:hover>div {
+    cursor: pointer;
+    color: $noteColor;
+    box-shadow:
+      1px 0 0 0 $lightBG,
+      0 1px 0 0 $lightBG,
+      1px 1px 0 0 $lightBG,
+      /* Just to fix the corner */
+      1px 0 0 0 $lightBG inset,
+      0 1px 0 0 $lightBG inset;
+
+    &:hover {
+      color: red;
+    }
+  }
+
+  &>div.selected {
+    color: red;
+  }
+
 }
