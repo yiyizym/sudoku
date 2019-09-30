@@ -30,11 +30,10 @@ class Grid extends React.Component<GridType, {}> {
     const { values } = this.props
     return _.isEmpty(values) ? null : (<div
       style={{
-        width: 800,
-        height: 800,
+        width: '70vw',
+        height: '70vh',
         display: "flex",
         flexWrap: "wrap",
-        border: "1px solid #ccc",
       }}
     >
       {this.genTiles()}

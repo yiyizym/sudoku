@@ -103,7 +103,7 @@ class App extends React.Component<{},AppState>{
       style={{
         display: 'flex',
         justifyContent: 'space-around',
-        paddingTop: 100
+        paddingTop: '10vh'
       }}
     >
       <GamePanel
