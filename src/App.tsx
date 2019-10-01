@@ -14,6 +14,7 @@ interface AppState {
   currentValues: ValueType;
   digitChosen: string;
   solved: ValueType;
+  gameKey: number;
 }
 
 class App extends React.Component<{},AppState>{
@@ -22,7 +23,8 @@ class App extends React.Component<{},AppState>{
     digitChosen: '',
     initialValues: {},
     currentValues: {},
-    solved: {}
+    solved: {},
+    gameKey: 0
   }
 
 
@@ -86,10 +88,13 @@ class App extends React.Component<{},AppState>{
   private initGame = (): void => {
     const solved = generate(30)
     const initialValues = this.pickValues(solved)
+    const gameKey = + new Date()
     this.setState({
       initialValues: initialValues ? initialValues : {},
       currentValues: initialValues ? initialValues : {},
-      solved: solved
+      solved: solved,
+      mode: 'fill',
+      gameKey: gameKey
     })
   }
 
@@ -127,7 +132,7 @@ class App extends React.Component<{},AppState>{
   }
 
   render(): JSX.Element|null {
-    const { mode, currentValues, digitChosen } = this.state
+    const { mode, currentValues, digitChosen, gameKey } = this.state
     
     return (
       <div
@@ -143,6 +148,7 @@ class App extends React.Component<{},AppState>{
           initGame={this.initGame}
         />
         <Grid
+          key={gameKey}
           values={currentValues}
           mode={mode}
           digitChosen={digitChosen}

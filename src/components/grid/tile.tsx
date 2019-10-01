@@ -15,7 +15,7 @@ interface TileState {
   selectedNoteDigits: string[];
 }
 
-class Tile extends React.Component<TileProps, TileState> {
+class Tile extends React.PureComponent<TileProps, TileState> {
   
   public state: TileState = {
     selectedNoteDigits: []
