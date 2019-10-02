@@ -39,7 +39,7 @@ class DigitPanel extends React.Component<DigitPanelProps,{}> {
     let chosenDigit = '0', currentCount = 10
     const digitCounts = Object.entries(toFillCount)
     for (let [key, val] of digitCounts) {
-      if (chosenDigit === '0' || (val !== 0 && val < currentCount)) {
+      if ((chosenDigit === '0' && val !== 0) || (val !== 0 && val < currentCount)) {
         chosenDigit = key
         currentCount = val
       }
