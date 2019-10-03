@@ -31,7 +31,7 @@ class App extends React.Component<{},AppState>{
   private toggleMode = (e: KeyboardEvent): any => {
     switch (e.code) {
       case 'Space':
-        this.setState({ mode: this.state.mode === 'fill' ? 'note' : 'fill' });
+        this.setState({ mode: this.state.mode === 'fill' ? 'mark' : 'fill' });
         break;
       default:
         break;

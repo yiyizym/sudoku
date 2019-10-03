@@ -1,1 +1,1 @@
-export type Mode = 'fill' | 'note'
+export type Mode = 'fill' | 'mark'

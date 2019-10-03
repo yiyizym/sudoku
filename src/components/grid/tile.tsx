@@ -12,20 +12,20 @@ interface TileProps {
 }
 
 interface TileState {
-  selectedNoteDigits: string[];
+  markedDigits: string[];
 }
 
 class Tile extends React.PureComponent<TileProps, TileState> {
   
   public state: TileState = {
-    selectedNoteDigits: []
+    markedDigits: []
   }
   
-  private getNotedTileClass = (): string => {
+  private getMarkedTileClass = (): string => {
     const { id } = this.props
     const idClz = `tile-${id}`
-    const noteModeClz = this.isInNoteMode() ? `tile-note-mode` : ''
-    return `tile ${idClz} tile-noted ${noteModeClz}`
+    const markModeClz = this.isInMarkMode() ? `tile-mark-mode` : ''
+    return `tile ${idClz} tile-marked ${markModeClz}`
   }
   
   private getTileClass = (): string => {
@@ -35,17 +35,17 @@ class Tile extends React.PureComponent<TileProps, TileState> {
     return `tile ${idClz} ${hilightTextClz}`
   }
   
-  private mayToggleSelected = (digit: string): void => {
-    if(!this.isInNoteMode()) { return }
-    const selected = this.state.selectedNoteDigits.includes(digit)
-    let newSelectedNoteDigits: string[] = []
-    if(selected) {
-      newSelectedNoteDigits = this.state.selectedNoteDigits.filter((d): boolean => d !== digit) 
+  private mayToggleMarked = (digit: string): void => {
+    if(!this.isInMarkMode()) { return }
+    const marked = this.state.markedDigits.includes(digit)
+    let newMarkedDigits: string[] = []
+    if(marked) {
+      newMarkedDigits = this.state.markedDigits.filter((d): boolean => d !== digit) 
     } else {
-      newSelectedNoteDigits = this.state.selectedNoteDigits.concat(digit)
+      newMarkedDigits = this.state.markedDigits.concat(digit)
     }
     this.setState({
-      selectedNoteDigits: newSelectedNoteDigits
+      markedDigits: newMarkedDigits
     })
   }
   
@@ -54,8 +54,8 @@ class Tile extends React.PureComponent<TileProps, TileState> {
     digit === '' && this.props.setDigit(id)
   }
 
-  private mayTriggerClickNoted = (): void => {
-    if(this.isInNoteMode()) { return }
+  private mayTriggerClickMarked = (): void => {
+    if(this.isInMarkMode()) { return }
     this.mayTriggerClick()
   }
 
@@ -63,8 +63,8 @@ class Tile extends React.PureComponent<TileProps, TileState> {
     return !!this.props.digit
   }
 
-  private isInNoteMode = (): boolean => {
-    return this.props.mode === 'note'
+  private isInMarkMode = (): boolean => {
+    return this.props.mode === 'mark'
   }
 
   private filledTile = (): React.ReactNode => {
@@ -77,16 +77,16 @@ class Tile extends React.PureComponent<TileProps, TileState> {
     </div>)
   }
 
-  private notedTile = (): React.ReactNode => {
+  private markedTile = (): React.ReactNode => {
     return (<div
-      className={this.getNotedTileClass()}
-      onClick={() => this.mayTriggerClickNoted()}
+      className={this.getMarkedTileClass()}
+      onClick={() => this.mayTriggerClickMarked()}
     >
       {
         digits.map((d: string): React.ReactNode => <div
           key={d}
-          onClick={() => this.mayToggleSelected(d)}
-          className={this.state.selectedNoteDigits.includes(d) ? 'selected' : ''}
+          onClick={() => this.mayToggleMarked(d)}
+          className={this.state.markedDigits.includes(d) ? 'marked' : ''}
         >
           {d}
         </div>)
@@ -97,7 +97,7 @@ class Tile extends React.PureComponent<TileProps, TileState> {
   render(): React.ReactNode {
     return this.isFilled() ? 
       this.filledTile() : 
-      this.notedTile()
+      this.markedTile()
   }
 }
 
