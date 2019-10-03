@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from "./components/grid";
 import DigitPanel from './components/digitPanel';
-import { ValueType, squares } from './components/backend/basics';
+import { ValueType, squares, peers } from './components/backend/basics';
 import GamePanel from './components/gamePanel';
 import { generate } from './components/backend/generate';
 import { digits } from './components/backend/basics'
@@ -60,6 +60,7 @@ class App extends React.Component<{},AppState>{
     const { solved, digitChosen } = this.state
     const valid = digitChosen === solved[id][0]
     if (valid || this.checkPosibility(id)) { // checkPosibility 性能差，只有当 valid 为 falsy 时才触发
+      this.removeUselessMarked(id)
       this.updateValues(id)
       return
     }
@@ -67,9 +68,24 @@ class App extends React.Component<{},AppState>{
   }
 
   private updateMarked = (id: string, newMarkedDigits: string[]): void => {
-    const copy = this.state.markedDigits
-    copy[id] = newMarkedDigits
-    this.setState({ markedDigits: copy })
+    const newDigits = {
+      ...this.state.markedDigits,
+      [id]: newMarkedDigits
+    }
+    this.setState({ markedDigits: newDigits })
+  }
+
+  private removeUselessMarked = (id: string): void => {
+    const peer = peers[id]
+    const {markedDigits: markedDigitsCopy, digitChosen} = this.state
+    for (const key in markedDigitsCopy) {
+      if (markedDigitsCopy.hasOwnProperty(key) && peer.has(key)) {
+        let newMarkedList = markedDigitsCopy[key];
+        newMarkedList = newMarkedList.filter(d => d !== digitChosen)
+        markedDigitsCopy[key] = newMarkedList;
+      }
+    }
+    this.setState({ markedDigits: markedDigitsCopy });
   }
 
   public componentDidMount(): void {
