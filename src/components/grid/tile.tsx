@@ -7,19 +7,13 @@ interface TileProps {
   id: string;
   digit: string;
   mode: Mode;
+  marked: string[];
   digitChosen: string;
   setDigit: (id: string) => void;
+  updateMarked: (newMarked: string[]) => void;
 }
 
-interface TileState {
-  markedDigits: string[];
-}
-
-class Tile extends React.PureComponent<TileProps, TileState> {
-  
-  public state: TileState = {
-    markedDigits: []
-  }
+class Tile extends React.PureComponent<TileProps> {
   
   private getMarkedTileClass = (): string => {
     const { id } = this.props
@@ -37,16 +31,15 @@ class Tile extends React.PureComponent<TileProps, TileState> {
   
   private mayToggleMarked = (digit: string): void => {
     if(!this.isInMarkMode()) { return }
-    const marked = this.state.markedDigits.includes(digit)
+    const { marked, updateMarked } = this.props
+    const isMarked = marked.includes(digit)
     let newMarkedDigits: string[] = []
-    if(marked) {
-      newMarkedDigits = this.state.markedDigits.filter((d): boolean => d !== digit) 
+    if (isMarked) {
+      newMarkedDigits = marked.filter((d): boolean => d !== digit) 
     } else {
-      newMarkedDigits = this.state.markedDigits.concat(digit)
+      newMarkedDigits = marked.concat(digit)
     }
-    this.setState({
-      markedDigits: newMarkedDigits
-    })
+    updateMarked(newMarkedDigits)
   }
   
   private mayTriggerClick = (): void => {
@@ -86,7 +79,7 @@ class Tile extends React.PureComponent<TileProps, TileState> {
         digits.map((d: string): React.ReactNode => <div
           key={d}
           onClick={() => this.mayToggleMarked(d)}
-          className={this.state.markedDigits.includes(d) ? 'marked' : ''}
+          className={this.props.marked.includes(d) ? 'marked' : ''}
         >
           {d}
         </div>)

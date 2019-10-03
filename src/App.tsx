@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from "./components/grid";
 import DigitPanel from './components/digitPanel';
-import { ValueType } from './components/backend/basics';
+import { ValueType, squares } from './components/backend/basics';
 import GamePanel from './components/gamePanel';
 import { generate } from './components/backend/generate';
 import { digits } from './components/backend/basics'
@@ -15,6 +15,7 @@ interface AppState {
   digitChosen: string;
   solved: ValueType;
   gameKey: number;
+  markedDigits: ValueType;
 }
 
 class App extends React.Component<{},AppState>{
@@ -24,6 +25,7 @@ class App extends React.Component<{},AppState>{
     initialValues: {},
     currentValues: {},
     solved: {},
+    markedDigits: {},
     gameKey: 0
   }
 
@@ -64,6 +66,11 @@ class App extends React.Component<{},AppState>{
     console.log('choose wrong digit')
   }
 
+  private updateMarked = (id: string, newMarkedDigits: string[]): void => {
+    const copy = this.state.markedDigits
+    copy[id] = newMarkedDigits
+    this.setState({ markedDigits: copy })
+  }
 
   public componentDidMount(): void {
     this.initGame()
@@ -84,17 +91,27 @@ class App extends React.Component<{},AppState>{
     }
     return pickedValue
   } 
+
+  private initMarkedDigits = (): ValueType => {
+    let marked: ValueType = {}
+    squares.forEach((s): void => {
+      marked[s] = []
+    })
+    return marked
+  }
  
   private initGame = (): void => {
     const solved = generate(30)
     const initialValues = this.pickValues(solved)
     const gameKey = + new Date()
+    const initialMarkedDigits = this.initMarkedDigits()
     this.setState({
       initialValues: initialValues ? initialValues : {},
       currentValues: initialValues ? initialValues : {},
       solved: solved,
       mode: 'fill',
-      gameKey: gameKey
+      gameKey: gameKey,
+      markedDigits: initialMarkedDigits
     })
   }
 
@@ -132,7 +149,7 @@ class App extends React.Component<{},AppState>{
   }
 
   render(): JSX.Element|null {
-    const { mode, currentValues, digitChosen, gameKey } = this.state
+    const { mode, currentValues, digitChosen, gameKey, markedDigits } = this.state
     
     return (
       <div
@@ -149,11 +166,13 @@ class App extends React.Component<{},AppState>{
         />
         <Grid
           key={gameKey}
+          markedDigits={markedDigits}
           values={currentValues}
           mode={mode}
           digitChosen={digitChosen}
           updateValues={this.updateValues}
           checkAndSetDigit={this.checkAndSetDigit}
+          updateMarked={this.updateMarked}
         />
         <DigitPanel 
           toFillCount={this.getToFillCount()}
