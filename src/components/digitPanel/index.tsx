@@ -36,6 +36,13 @@ class DigitPanel extends React.Component<DigitPanelProps,{}> {
   private ensureDigitChosen = (): void => {
     const { digitChosen, toFillCount, selectDigit } = this.props
     if(digitChosen && toFillCount[digitChosen]) { return }
+    const lessCountDigit = this.findLessCountDigit()
+    if(lessCountDigit === '0') { return } // we finished the game
+    selectDigit(lessCountDigit)
+  }
+
+  private findLessCountDigit = (): string => {
+    const { toFillCount } = this.props
     let chosenDigit = '0', currentCount = 10
     const digitCounts = Object.entries(toFillCount)
     for (let [key, val] of digitCounts) {
@@ -44,8 +51,7 @@ class DigitPanel extends React.Component<DigitPanelProps,{}> {
         currentCount = val
       }
     }
-    if(chosenDigit === '0') { return } // we finished the game
-    selectDigit(chosenDigit)
+    return chosenDigit
   }
 
   public render(): JSX.Element {
