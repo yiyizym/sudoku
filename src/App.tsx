@@ -176,8 +176,6 @@ class App extends React.Component<{},AppState>{
         }}
       >
         <GamePanel
-          mode={mode}
-          changeMode={(mode: Mode): void => this.setState({ mode })}
           initGame={this.initGame}
         />
         <Grid

@@ -72,6 +72,10 @@ $markColor: #291919;
 .tile-F5,
 .tile-F6 {
   background: $lightBG;
+
+  .mark-mode & {
+    background: $darkBG;
+  }
 }
 
 .tile-A4,
@@ -111,6 +115,9 @@ $markColor: #291919;
 .tile-I5,
 .tile-I6 {
   background: $darkBG;
+  .mark-mode & {
+    background: $lightBG;
+  }
 }
 
 .tile-marked {

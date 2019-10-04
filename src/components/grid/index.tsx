@@ -35,7 +35,7 @@ class Grid extends React.Component<GridType, {}> {
     })
   }
   render(): JSX.Element|null {
-    const { values } = this.props
+    const { values, mode } = this.props
     return _.isEmpty(values) ? null : (<div
       style={{
         width: '80vh',
@@ -43,6 +43,7 @@ class Grid extends React.Component<GridType, {}> {
         display: "flex",
         flexWrap: "wrap",
       }}
+      className={`${mode}-mode`}
     >
       {this.genTiles()}
     </div>)
