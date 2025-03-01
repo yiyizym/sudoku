@@ -1,10 +1,10 @@
 import React from 'react';
 import Grid from "./components/grid";
 import DigitPanel from './components/digitPanel';
-import { ValueType, squares, peers } from './components/backend/basics';
+import './components/backend';
+import { ValueType, squares, peers, digits } from './components/backend/basics';
 import GamePanel from './components/gamePanel';
 import { generate } from './components/backend/generate';
-import { digits } from './components/backend/basics'
 import { search } from './components/backend/solve';
 import { Mode } from './schema'
 
@@ -117,6 +117,7 @@ class App extends React.Component<{},AppState>{
   }
  
   private initGame = (): void => {
+    // we should call the rest api to get the initialValues and solvedValues, keep the gameKeys
     const solved = generate(30)
     const initialValues = this.pickValues(solved)
     const gameKey = + new Date()
