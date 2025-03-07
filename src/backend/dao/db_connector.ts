@@ -1,5 +1,7 @@
 import * as sqlite3 from 'sqlite3';
-import { open, Database } from 'sqlite'
+import { open, Database } from 'sqlite';
+import { generateSudoku } from './generate_sudoku';
+
 
 // Define a type for the Sudoku grid (2D array of numbers 0-9)
 export type SudokuGrid = number[][];
@@ -64,7 +66,8 @@ export async function initializeDatabase(dbPath: string): Promise<Database> {
     await db.run(`
         CREATE TABLE IF NOT EXISTS sudoku_grids (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            grid_string TEXT NOT NULL
+            grid_string TEXT NOT NULL,
+            grid_solved_string TEXT NOT NULL
             -- ... other columns like difficulty, date solved, etc. ...
         )
     `);
@@ -77,11 +80,12 @@ export async function initializeDatabase(dbPath: string): Promise<Database> {
  * @param grid The Sudoku grid (number[][]) to insert.
  * @returns A Promise that resolves when the insertion is complete.
  */
-export async function insertGridIntoDatabase(db: Database, grid: SudokuGrid): Promise<void> {
+export async function insertGridIntoDatabase(db: Database, grid: SudokuGrid, gridSolved: SudokuGrid): Promise<void> {
     const gridStr = gridToString(grid);
+    const gridSolvedStr = gridToString(gridSolved);
     await db.run(`
-        INSERT INTO sudoku_grids (grid_string) VALUES (?)
-    `, [gridStr]);
+        INSERT INTO sudoku_grids (grid_string, grid_solved_string) VALUES (?,?)
+    `, [gridStr, gridSolvedStr]);
 }
 
 /**
@@ -92,7 +96,7 @@ export async function insertGridIntoDatabase(db: Database, grid: SudokuGrid): Pr
  */
 export async function getGridFromDatabase(db: Database, gridId: number): Promise<SudokuGrid | null> {
     const result = await db.get<{ grid_string: string }>(`
-        SELECT grid_string FROM sudoku_grids WHERE id = ?
+        SELECT grid_string, grid_solved_string FROM sudoku_grids WHERE id = ?
     `, [gridId]);
 
     if (result) {
@@ -102,41 +106,52 @@ export async function getGridFromDatabase(db: Database, gridId: number): Promise
     }
 }
 
+export async function getRandomGridFromDatabase(db: Database): Promise<{board: string; solvedBoard: string} | null> {
+    const result = await db.get<{ grid_string: string, grid_solved_string: string }>(`
+        SELECT grid_string, grid_solved_string FROM sudoku_grids ORDER BY RANDOM() LIMIT 1
+    `);
 
-// Example Usage (Node.js environment) -  You would typically run this in a Node.js script
-async function main() {
-    const dbPath = './sudoku.db'; // Path to your SQLite database file
-    const db = await initializeDatabase(dbPath);
-
-    const exampleSudokuGrid: SudokuGrid = [
-        [5, 3, 0, 0, 7, 0, 0, 0, 0],
-        [6, 0, 0, 1, 9, 5, 0, 0, 0],
-        [0, 9, 8, 0, 0, 0, 0, 6, 0],
-        [8, 0, 0, 0, 6, 0, 0, 0, 3],
-        [4, 0, 0, 8, 0, 3, 0, 0, 1],
-        [7, 0, 0, 0, 2, 0, 0, 0, 6],
-        [0, 6, 0, 0, 0, 0, 2, 8, 0],
-        [0, 0, 0, 4, 1, 9, 0, 0, 5],
-        [0, 0, 0, 0, 8, 0, 0, 7, 9]
-    ];
-
-    // Insert the example grid
-    await insertGridIntoDatabase(db, exampleSudokuGrid);
-    console.log("Sudoku grid inserted successfully.");
-
-    // Retrieve the grid we just inserted (assuming it's the first one, ID 1)
-    const retrievedGrid = await getGridFromDatabase(db, 1);
-    if (retrievedGrid) {
-        console.log("Retrieved Sudoku grid:");
-        console.log(retrievedGrid);
+    if (result) {
+        return { board: result.grid_string, solvedBoard: result.grid_solved_string };
     } else {
-        console.log("Sudoku grid not found with ID 1.");
+        return null; // Grid not found
     }
-
-    await db.close(); // Close the database connection
 }
 
+
+// Example Usage (Node.js environment) -  You would typically run this in a Node.js script
+// async function main() {
+//     const dbPath = './sudoku.db'; // Path to your SQLite database file
+//     const db = await initializeDatabase(dbPath);
+
+
+//     for (let i = 0; i < 10; i++) {
+//         const result = generateSudoku(Math.random, 25);
+//         if (!result) {
+//             console.log('Generate sudoku failed!');
+//             return;
+//         }
+//         const { board, solvedBoard } = result;
+//         // Insert the example grid
+//         console.log(`Generated ${i+1} Sudoku grid`);
+//         await insertGridIntoDatabase(db, board, solvedBoard);
+//         console.log(`Inserted ${i+1} Sudoku grid`);
+//     }
+//     console.log("Sudoku grid inserted successfully.");
+
+//     // Retrieve the grid we just inserted (assuming it's the first one, ID 1)
+//     // const retrievedGrid = await getGridFromDatabase(db, 1);
+//     // if (retrievedGrid) {
+//     //     console.log("Retrieved Sudoku grid:");
+//     //     console.table(retrievedGrid);
+//     // } else {
+//     //     console.log("Sudoku grid not found with ID 1.");
+//     // }
+
+//     await db.close(); // Close the database connection
+// }
+
 // Run the example
-main().catch(err => {
-    console.error("Error:", err);
-});
+// main().catch(err => {
+//     console.error("Error:", err);
+// });

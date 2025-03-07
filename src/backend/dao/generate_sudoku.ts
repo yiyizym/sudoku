@@ -1,13 +1,13 @@
-import { solveSudoku } from './solve_sudoku.ts';
+import { solveSudoku } from './solve_sudoku';
 
-function generateSudoku(rng = Math.random, clues = 25): number[][] | null {
+function generateSudoku(rng = Math.random, clues = 25): { solvedBoard: number[][]; board: number[][] } | null {
     // 1. Generate a Complete Valid Solution
     const solvedBoard = generateSolvedSudoku(rng);
     if (!solvedBoard) {
         return null; // Could not generate valid solved board
     }
-    console.log("Solved Board:");
-    console.table(solvedBoard);
+    // console.log("Solved Board:");
+    // console.table(solvedBoard);
     // 2. Start Removing Numbers Randomly
     const board = solvedBoard.map(row => [...row]);
     
@@ -29,7 +29,7 @@ function generateSudoku(rng = Math.random, clues = 25): number[][] | null {
         }
         if (numClues(board) <= clues) break
     }
-    return board;
+    return {solvedBoard, board};
 
 }
 
@@ -111,8 +111,8 @@ function generateSolvedSudoku(rng = Math.random): number[][] | null {
     // shuffle(lastRow, rng);
     // initBoard[8] = lastRow;
 
-    console.log("Initial Board:");
-    console.table(initBoard);
+    // console.log("Initial Board:");
+    // console.table(initBoard);
 
     return solveSudoku(initBoard);
 }
@@ -124,12 +124,17 @@ function shuffle<T>(array: T[], rng = Math.random): void {
     }
 }
 
-// Example Usage
-const newSudokuBoard = generateSudoku(Math.random, 25);
+export { generateSudoku };
 
-if (newSudokuBoard) {
-    console.log("Generated Sudoku Puzzle!");
-    console.table(newSudokuBoard);
-} else {
-    console.log("Failed to generate Sudoku puzzle.");
-}
+// Example Usage
+// const result = generateSudoku(Math.random, 25);
+
+// if (result) {
+//     const { solvedBoard, board } = result;
+//     console.log("Generated Sudoku Puzzle!");
+//     console.table(board);
+//     console.log("Solved Sudoku Puzzle!");
+//     console.table(solvedBoard);
+// } else {
+//     console.log("Failed to generate Sudoku puzzle.");
+// }
