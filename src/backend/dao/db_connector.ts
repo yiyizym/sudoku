@@ -1,6 +1,5 @@
 import * as sqlite3 from 'sqlite3';
 import { open, Database } from 'sqlite';
-import { generateSudoku } from './generate_sudoku';
 
 
 // Define a type for the Sudoku grid (2D array of numbers 0-9)
@@ -67,7 +66,8 @@ export async function initializeDatabase(dbPath: string): Promise<Database> {
         CREATE TABLE IF NOT EXISTS sudoku_grids (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             grid_string TEXT NOT NULL,
-            grid_solved_string TEXT NOT NULL
+            grid_solved_string TEXT NOT NULL,
+            clues INTEGER NOT NULL DEFAULT 0,
             -- ... other columns like difficulty, date solved, etc. ...
         )
     `);
@@ -80,12 +80,12 @@ export async function initializeDatabase(dbPath: string): Promise<Database> {
  * @param grid The Sudoku grid (number[][]) to insert.
  * @returns A Promise that resolves when the insertion is complete.
  */
-export async function insertGridIntoDatabase(db: Database, grid: SudokuGrid, gridSolved: SudokuGrid): Promise<void> {
+export async function insertGridIntoDatabase(db: Database, grid: SudokuGrid, gridSolved: SudokuGrid, clue: number): Promise<void> {
     const gridStr = gridToString(grid);
     const gridSolvedStr = gridToString(gridSolved);
     await db.run(`
-        INSERT INTO sudoku_grids (grid_string, grid_solved_string) VALUES (?,?)
-    `, [gridStr, gridSolvedStr]);
+        INSERT INTO sudoku_grids (grid_string, grid_solved_string, clue) VALUES (?,?,?)
+    `, [gridStr, gridSolvedStr, clue]);
 }
 
 /**

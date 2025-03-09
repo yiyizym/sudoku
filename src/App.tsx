@@ -2,10 +2,8 @@ import React from 'react';
 import Grid from "./components/grid";
 import DigitPanel from './components/digitPanel';
 import './components/backend';
-import { ValueType, squares, peers, digits } from './components/backend/basics';
+import { ValueType, peers } from './components/backend/basics';
 import GamePanel from './components/gamePanel';
-import { generate } from './components/backend/generate';
-import { search } from './components/backend/solve';
 import { Mode } from './schema'
 
 interface AppState {
@@ -48,23 +46,15 @@ class App extends React.Component<{},AppState>{
     this.setState({ currentValues: newValues })
   }
 
-  private checkPosibility = (id: string): boolean => {
-    const posibleValues = {
-      ...this.state.currentValues,
-      [id]: [this.state.digitChosen]
-    }
-    return  !!search(posibleValues)
-  }
-
   private checkAndSetDigit = (id: string): void => {
-    const { solved, digitChosen } = this.state
-    const valid = digitChosen === solved[id][0]
-    if (valid || this.checkPosibility(id)) { // checkPosibility 性能差，只有当 valid 为 falsy 时才触发
+    // const { solved, digitChosen } = this.state
+    // const valid = digitChosen === solved[id][0]
+    console.log('choose id: ', id); // id is something like C6
+    // if (valid) {
       this.removeUselessMarked(id)
       this.updateValues(id)
-      return
-    }
-    console.log('choose wrong digit')
+    //   return
+    // }
   }
 
   private updateMarked = (id: string, newMarkedDigits: string[]): void => {
@@ -76,8 +66,12 @@ class App extends React.Component<{},AppState>{
   }
 
   private removeUselessMarked = (id: string): void => {
-    const peer = peers[id]
-    const {markedDigits: markedDigitsCopy, digitChosen} = this.state
+    const peer = peers[id];
+    console.log('peers: ', peers);
+    const {markedDigits: markedDigitsCopy, digitChosen} = this.state;
+    console.log('digitChosen: ', digitChosen);
+    console.log('markedDigitsCopy: ', markedDigitsCopy);
+    console.log('peer: ', peer)
     for (const key in markedDigitsCopy) {
       if (markedDigitsCopy.hasOwnProperty(key) && peer.has(key)) {
         let newMarkedList = markedDigitsCopy[key];
@@ -95,25 +89,6 @@ class App extends React.Component<{},AppState>{
 
   public componentWillUnmount(): void {
     this.unListenToKeyPress()
-  }
-
-  private pickValues = (solved: ValueType): ValueType =>{
-    const pickedValue: ValueType = {}
-    for (const key in solved) {
-      if (solved.hasOwnProperty(key)) {
-        const unSeal = Math.random() > 0.60
-        pickedValue[key] = unSeal ? solved[key] : digits
-      }
-    }
-    return pickedValue
-  } 
-
-  private initMarkedDigits = (): ValueType => {
-    let marked: ValueType = {}
-    squares.forEach((s): void => {
-      marked[s] = []
-    })
-    return marked
   }
 
 private generateGrid = (initialString: string) => {
