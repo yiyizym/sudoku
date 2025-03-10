@@ -2,11 +2,13 @@ import React from 'react';
 
 interface GamePanelProps {
   initGame: () => void;
+    undo: () => void;
+  redo: () => void;
 }
 
 class GamePanel extends React.PureComponent<GamePanelProps> {
   public render = (): JSX.Element => {
-    const { initGame } = this.props;
+    const { initGame, undo, redo } = this.props;
     return (<div
       style={{
         display: 'flex',
@@ -15,6 +17,8 @@ class GamePanel extends React.PureComponent<GamePanelProps> {
       }}
     >
       <button onClick={initGame}>(Re)Play</button>
+      <button onClick={undo}>Undo</button>
+      <button onClick={redo}>Redo</button>
     </div>)
   }
 }

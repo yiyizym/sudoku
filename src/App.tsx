@@ -14,6 +14,8 @@ interface AppState {
   solved: ValueType;
   gameKey: number;
   markedDigits: ValueType;
+  historyStack: string[];
+  historyIndex: number;
 }
 
 class App extends React.Component<{},AppState>{
@@ -24,7 +26,9 @@ class App extends React.Component<{},AppState>{
     currentValues: {},
     solved: {},
     markedDigits: {},
-    gameKey: 0
+    gameKey: 0,
+    historyStack: [],
+    historyIndex: 0
   }
 
 
@@ -49,8 +53,48 @@ class App extends React.Component<{},AppState>{
 
   private checkAndSetDigit = (id: string): void => {
     console.log('choose id: ', id); // id is something like C6
+    this.replaceOrPushStack(id);
     this.updateValues(id)
   }
+
+  private replaceOrPushStack = (id: string): void => {
+    if (this.state.historyIndex < this.state.historyStack.length) {
+        // should drop the values equal or greater than index
+        const newStack = this.state.historyStack.slice(0, this.state.historyIndex);
+        newStack.push(id + '_' + this.state.digitChosen)
+        this.setState({ historyStack: newStack, historyIndex: newStack.length })
+    } else {
+        const newStack = [...this.state.historyStack, id + '_' + this.state.digitChosen];
+        this.setState({ historyStack: newStack, historyIndex: newStack.length })
+        // just push the values
+    }
+  }
+
+
+  private toStackTop = (): void => {
+    if (this.state.historyIndex < this.state.historyStack.length) {
+        // set the grid by the stack values
+        const value = this.state.historyStack[this.state.historyIndex];
+        const [id, digit] = value.split('_');
+        const newValues = {
+            ...this.state.currentValues,
+            [id]: [digit]
+        }
+        this.setState({ historyIndex: this.state.historyIndex + 1, currentValues: newValues })
+    }
+  }
+
+    private toStackBottom = (): void => {
+        if (this.state.historyIndex > 0) {
+            const value = this.state.historyStack[this.state.historyIndex-1];
+            const [id, ] = value.split('_');
+            const newValues = {
+                ...this.state.currentValues,
+                [id]: ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+            }
+            this.setState({ historyIndex: this.state.historyIndex - 1, currentValues: newValues })
+        }
+    }
 
   private updateMarked = (id: string, newMarkedDigits: string[]): void => {
     const newDigits = {
@@ -168,6 +212,8 @@ private generateGrid = (initialString: string) => {
       >
         <GamePanel
           initGame={this.initGame}
+          undo={this.toStackBottom}
+          redo={this.toStackTop}
         />
         <Grid
           key={gameKey}
