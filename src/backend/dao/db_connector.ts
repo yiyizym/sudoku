@@ -67,7 +67,7 @@ export async function initializeDatabase(dbPath: string): Promise<Database> {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             grid_string TEXT NOT NULL,
             grid_solved_string TEXT NOT NULL,
-            clues INTEGER NOT NULL DEFAULT 0,
+            clues INTEGER NOT NULL DEFAULT 0
             -- ... other columns like difficulty, date solved, etc. ...
         )
     `);

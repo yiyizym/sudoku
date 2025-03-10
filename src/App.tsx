@@ -2,7 +2,7 @@ import React from 'react';
 import Grid from "./components/grid";
 import DigitPanel from './components/digitPanel';
 import './components/backend';
-import { ValueType, peers } from './components/backend/basics';
+import { ValueType } from './components/backend/basics';
 import GamePanel from './components/gamePanel';
 import { Mode } from './schema'
 
@@ -43,18 +43,13 @@ class App extends React.Component<{},AppState>{
       ...this.state.currentValues,
       [id]: [this.state.digitChosen]
     }
+    console.log('newValues: ', newValues)
     this.setState({ currentValues: newValues })
   }
 
   private checkAndSetDigit = (id: string): void => {
-    // const { solved, digitChosen } = this.state
-    // const valid = digitChosen === solved[id][0]
     console.log('choose id: ', id); // id is something like C6
-    // if (valid) {
-      this.removeUselessMarked(id)
-      this.updateValues(id)
-    //   return
-    // }
+    this.updateValues(id)
   }
 
   private updateMarked = (id: string, newMarkedDigits: string[]): void => {
@@ -63,23 +58,6 @@ class App extends React.Component<{},AppState>{
       [id]: newMarkedDigits
     }
     this.setState({ markedDigits: newDigits })
-  }
-
-  private removeUselessMarked = (id: string): void => {
-    const peer = peers[id];
-    console.log('peers: ', peers);
-    const {markedDigits: markedDigitsCopy, digitChosen} = this.state;
-    console.log('digitChosen: ', digitChosen);
-    console.log('markedDigitsCopy: ', markedDigitsCopy);
-    console.log('peer: ', peer)
-    for (const key in markedDigitsCopy) {
-      if (markedDigitsCopy.hasOwnProperty(key) && peer.has(key)) {
-        let newMarkedList = markedDigitsCopy[key];
-        newMarkedList = newMarkedList.filter(d => d !== digitChosen)
-        markedDigitsCopy[key] = newMarkedList;
-      }
-    }
-    this.setState({ markedDigits: markedDigitsCopy });
   }
 
   public componentDidMount(): void {
@@ -133,6 +111,7 @@ private generateGrid = (initialString: string) => {
       // {"A1":["1","2","3","4","5","6","7","8","9"],"A2":["1","2","3","4","5","6","7","8","9"],"A3":["3"],"A4":["1","2","3","4","5","6","7","8","9"],"A5":["1","2","3","4","5","6","7","8","9"],"A6":["1","2","3","4","5","6","7","8","9"],"A7":["1","2","3","4","5","6","7","8","9"],"A8":["8"],"A9":["1","2","3","4","5","6","7","8","9"],"B1":["2"],"B2":["8"],"B3":["6"],"B4":["1","2","3","4","5","6","7","8","9"],"B5":["1","2","3","4","5","6","7","8","9"],"B6":["5"],"B7":["1","2","3","4","5","6","7","8","9"],"B8":["1","2","3","4","5","6","7","8","9"],"B9":["1","2","3","4","5","6","7","8","9"],"C1":["1","2","3","4","5","6","7","8","9"],"C2":["1","2","3","4","5","6","7","8","9"],"C3":["1","2","3","4","5","6","7","8","9"],"C4":["3"],"C5":["8"],"C6":["4"],"C7":["1"],"C8":["1","2","3","4","5","6","7","8","9"],"C9":["1","2","3","4","5","6","7","8","9"],"D1":["1","2","3","4","5","6","7","8","9"],"D2":["1","2","3","4","5","6","7","8","9"],"D3":["1","2","3","4","5","6","7","8","9"],"D4":["1","2","3","4","5","6","7","8","9"],"D5":["2"],"D6":["1","2","3","4","5","6","7","8","9"],"D7":["6"],"D8":["1","2","3","4","5","6","7","8","9"],"D9":["1","2","3","4","5","6","7","8","9"],"E1":["7"],"E2":["1","2","3","4","5","6","7","8","9"],"E3":["8"],"E4":["1","2","3","4","5","6","7","8","9"],"E5":["1","2","3","4","5","6","7","8","9"],"E6":["1"],"E7":["1","2","3","4","5","6","7","8","9"],"E8":["3"],"E9":["1","2","3","4","5","6","7","8","9"],"F1":["1","2","3","4","5","6","7","8","9"],"F2":["2"],"F3":["1","2","3","4","5","6","7","8","9"],"F4":["6"],"F5":["1","2","3","4","5","6","7","8","9"],"F6":["1","2","3","4","5","6","7","8","9"],"F7":["1","2","3","4","5","6","7","8","9"],"F8":["5"],"F9":["1"],"G1":["1","2","3","4","5","6","7","8","9"],"G2":["1","2","3","4","5","6","7","8","9"],"G3":["1","2","3","4","5","6","7","8","9"],"G4":["1","2","3","4","5","6","7","8","9"],"G5":["1","2","3","4","5","6","7","8","9"],"G6":["1","2","3","4","5","6","7","8","9"],"G7":["8"],"G8":["1","2","3","4","5","6","7","8","9"],"G9":["1","2","3","4","5","6","7","8","9"],"H1":["1","2","3","4","5","6","7","8","9"],"H2":["1","2","3","4","5","6","7","8","9"],"H3":["9"],"H4":["1"],"H5":["1","2","3","4","5","6","7","8","9"],"H6":["1","2","3","4","5","6","7","8","9"],"H7":["4"],"H8":["1","2","3","4","5","6","7","8","9"],"H9":["1","2","3","4","5","6","7","8","9"],"I1":["4"],"I2":["1","2","3","4","5","6","7","8","9"],"I3":["2"],"I4":["8"],"I5":["1","2","3","4","5","6","7","8","9"],"I6":["6"],"I7":["9"],"I8":["1","2","3","4","5","6","7","8","9"],"I9":["5"]}
     console.log('>>> initialMarkedDigits: ', initialMarkedDigits);
       // {"A1":[],"A2":[],"A3":[],"A4":[],"A5":[],"A6":[],"A7":[],"A8":[],"A9":[],"B1":[],"B2":[],"B3":[],"B4":[],"B5":[],"B6":[],"B7":[],"B8":[],"B9":[],"C1":[],"C2":[],"C3":[],"C4":[],"C5":[],"C6":[],"C7":[],"C8":[],"C9":[],"D1":[],"D2":[],"D3":[],"D4":[],"D5":[],"D6":[],"D7":[],"D8":[],"D9":[],"E1":[],"E2":[],"E3":[],"E4":[],"E5":[],"E6":[],"E7":[],"E8":[],"E9":[],"F1":[],"F2":[],"F3":[],"F4":[],"F5":[],"F6":[],"F7":[],"F8":[],"F9":[],"G1":[],"G2":[],"G3":[],"G4":[],"G5":[],"G6":[],"G7":[],"G8":[],"G9":[],"H1":[],"H2":[],"H3":[],"H4":[],"H5":[],"H6":[],"H7":[],"H8":[],"H9":[],"I1":[],"I2":[],"I3":[],"I4":[],"I5":[],"I6":[],"I7":[],"I8":[],"I9":[]}
+      
     this.setState({
       initialValues: initialValues ? initialValues : {},
       currentValues: initialValues ? initialValues : {},

@@ -14,7 +14,7 @@ const port = 3001;
 
 app.get('/get_grid', async (req, res) => {
     const db = await open({
-        filename: path.resolve(__dirname, './sudoku.db'),
+        filename: path.resolve(__dirname, './dao/sudoku.db'),
         driver: sqlite3.Database
     });
     const result = await getRandomGridFromDatabase(db);
