@@ -32,14 +32,31 @@ class App extends React.Component<{},AppState>{
   }
 
 
-  private toggleMode = (e: KeyboardEvent): any => {
+  private shortCuts = (e: KeyboardEvent): any => {
     switch (e.code) {
       case 'Space':
         this.setState({ mode: this.state.mode === 'fill' ? 'mark' : 'fill' });
         break;
+      case 'Digit1':
+      case 'Digit2':
+      case 'Digit3':
+      case 'Digit4':
+      case 'Digit5':
+      case 'Digit6':
+      case 'Digit7':
+      case 'Digit8':
+      case 'Digit9':
+            this.setChosenKey(e.key);
+        break;
       default:
         break;
     }
+  }
+
+    private setChosenKey = (digitChosen: string): void => {
+        const toFillCount = this.getToFillCount();
+        if (!digitChosen || !toFillCount[digitChosen]) { return }
+        this.setState({ digitChosen })
   }
 
   private updateValues = (id: string): void => {
@@ -168,12 +185,12 @@ private generateGrid = (initialString: string) => {
 
   private listenToKeyPress = (): void => {
     const body = document.querySelector('body') as HTMLBodyElement
-    body.addEventListener('keypress', this.toggleMode)
+    body.addEventListener('keypress', this.shortCuts)
   }
   
   private unListenToKeyPress = (): void => {
     const body = document.querySelector('body') as HTMLBodyElement
-    body.removeEventListener('keypress', this.toggleMode)
+    body.removeEventListener('keypress', this.shortCuts)
   }
 
   private getToFillCount(): { [key: string]: number } {
