@@ -4,6 +4,7 @@ import { open, Database } from 'sqlite';
 
 // Define a type for the Sudoku grid (2D array of numbers 0-9)
 export type SudokuGrid = number[][];
+export type Level = 'easy' | 'medium' | 'hard';
 
 /**
  * Converts a Sudoku grid (number[][]) to a string representation.
@@ -110,6 +111,24 @@ export async function getRandomGridFromDatabase(db: Database): Promise<{board: s
     const result = await db.get<{ grid_string: string, grid_solved_string: string }>(`
         SELECT grid_string, grid_solved_string FROM sudoku_grids ORDER BY RANDOM() LIMIT 1
     `);
+
+    if (result) {
+        return { board: result.grid_string, solvedBoard: result.grid_solved_string };
+    } else {
+        return null; // Grid not found
+    }
+}
+
+const levelMap: Record<Level, number> = {
+    easy: 35,
+    medium: 30,
+    hard: 25
+};
+
+export async function getRandomGridByLevelFromDatabase(db: Database, level: Level): Promise<{ board: string; solvedBoard: string } | null> {
+    const result = await db.get<{ grid_string: string, grid_solved_string: string }>(`
+        SELECT grid_string, grid_solved_string FROM sudoku_grids where clue = ? ORDER BY RANDOM() LIMIT 1
+    `, [levelMap[level] ?? 30]);
 
     if (result) {
         return { board: result.grid_string, solvedBoard: result.grid_solved_string };

@@ -156,7 +156,7 @@ private generateGrid = (initialString: string) => {
 };
  
   private initGame = async (): Promise<void> => {
-    const result = await fetch('http://localhost:3001/get_grid');
+    const result = await fetch('http://localhost:3001/get_grid?level=medium');
     if (!result.ok) {
         return;
     }
