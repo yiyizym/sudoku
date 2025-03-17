@@ -7,7 +7,7 @@ async function main() {
     const clue = 35;
 
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 100; i++) {
         console.log(`Generating ${i+1} Sudoku grid`);
         const result = generateSudoku(Math.random, clue);
         if (!result) {
