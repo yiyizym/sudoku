@@ -1,6 +1,6 @@
 import React from 'react';
 import './tile.scss'
-import { digits } from '../backend/basics';
+import { digits } from '../basics';
 import { Mode } from '../../schema';
 
 interface TileProps {

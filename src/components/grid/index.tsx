@@ -1,6 +1,6 @@
 import React from "react";
 import Tile from "./tile";
-import { ValueType } from "../backend/basics";
+import { ValueType } from "../basics";
 import _ from "lodash";
 import { Mode } from "../../schema";
 

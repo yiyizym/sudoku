@@ -2,7 +2,7 @@ import React from 'react';
 import Grid from "./components/grid";
 import DigitPanel from './components/digitPanel';
 import './components/backend';
-import { ValueType } from './components/backend/basics';
+import { ValueType } from './components/basics';
 import GamePanel from './components/gamePanel';
 import { Mode } from './schema'
 import MyDialog from './components/dialog';
