@@ -21,14 +21,15 @@ class DigitPanel extends React.Component<DigitPanelProps,{}> {
     const { toFillCount, selectDigit, digitChosen } = this.props
     const digitCounts = Object.entries(toFillCount)
     return digitCounts
-      .filter(([, count]) => !!count)
+    //   .filter(([, count]) => !!count)
       .map(([digit, count]) => {
         return <div
           key={digit}
           className={`digit-panel-item ${digit === digitChosen ? 'selected' : ''}`}
           onClick={() => selectDigit(digit)}
         >
-          {Array.from({ length: count }, ():string => digit).join(' ')}
+            <span className='digit-panel-item-digit'>{digit}</span>
+            <span className='digit-panel-item-count'>({count})</span>
         </div>
       })
   }
@@ -56,10 +57,6 @@ class DigitPanel extends React.Component<DigitPanelProps,{}> {
 
   public render(): JSX.Element {
     return (<div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-      }}
       className='digit-panel'
     >
       {this.generateDigits()}

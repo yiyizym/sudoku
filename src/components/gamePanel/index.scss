@@ -9,3 +9,18 @@
         cursor: pointer;
     }
 }
+
+@media screen and (max-width: 768px) {
+    .game-panel {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+        gap: 5px;
+        button {
+            width: 30%;
+            padding: 10px;
+        }
+        order: 3;
+    }
+    
+}

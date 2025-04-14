@@ -1,6 +1,8 @@
 @import '../../assets/styles/constants.scss';
 
 .digit-panel {
+    display: flex;
+    flex-direction: column;
   &-item {
     display: flex;
     width: 100px;
@@ -15,7 +17,32 @@
     }
   }
 
+  &-item-count {
+    color: gray;
+    font-size: smaller;
+  }
+
   .selected {
     background-color: $darkBG;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .digit-panel {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 20px 0;
+    &-item {
+        width: 33%;
+        padding: 0;
+        display: flex;
+        height: 40px;
+        font-size: 14px;
+        justify-content: center;
+    }
+    &-item-count {
+    font-size: smaller;
+  }
   }
 }

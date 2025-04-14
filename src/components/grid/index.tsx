@@ -3,6 +3,7 @@ import Tile from "./tile";
 import { ValueType } from "../basics";
 import _ from "lodash";
 import { Mode } from "../../schema";
+import "./index.scss";
 
 interface GridType {
   mode: Mode;
@@ -44,13 +45,7 @@ class Grid extends React.Component<GridType, {}> {
   render(): JSX.Element|null {
     const { values, mode } = this.props
     return _.isEmpty(values) ? null : (<div
-      style={{
-        width: '80vh',
-        height: '80vh',
-        display: "flex",
-        flexWrap: "wrap",
-      }}
-      className={`${mode}-mode`}
+      className={`game-panel-grid ${mode}-mode`}
     >
       {this.genTiles()}
     </div>)

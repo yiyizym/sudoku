@@ -5,6 +5,7 @@ import { ValueType } from './components/basics';
 import GamePanel from './components/gamePanel';
 import { Mode } from './schema'
 import MyDialog from './components/dialog';
+import './App.scss';
 
 interface AppState {
     mode: Mode;
@@ -253,11 +254,7 @@ class App extends React.Component<{}, AppState> {
 
         return (
             <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-around',
-                    paddingTop: '10vh'
-                }}
+                className='app'
             >
                 <GamePanel
                     initGame={this.initGame}
