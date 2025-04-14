@@ -20,6 +20,7 @@ interface AppState {
     historyStack: string[];
     historyIndex: number;
     isDialogOpen: boolean;
+    level: string;
 }
 
 class App extends React.Component<{}, AppState> {
@@ -36,6 +37,7 @@ class App extends React.Component<{}, AppState> {
         historyStack: [],
         historyIndex: 0,
         isDialogOpen: false,
+        level: 'medium'
     }
 
 
@@ -171,15 +173,35 @@ class App extends React.Component<{}, AppState> {
         return initialValues;
     };
 
-    private initGame = async (): Promise<void> => {
-        const result = await fetch('http://localhost:3001/get_grid?level=medium');
+    private getBundledBordData = async () => {
+        // we will get a bunch of data from the localStorage or from the rest api
+        const { level } = this.state;
+        const data = localStorage.getItem('sudoku_data');
+        if (data) {
+            const parsedData = JSON.parse(data);
+            return parsedData[level] || null;
+        }
+        const result = await fetch(SERVICE_URL);
         if (!result.ok) {
+            return null;
+        }
+        const json = await result.json();
+        localStorage.setItem('sudoku_data', JSON.stringify(json));
+        return json[level] || null;
+    }
+
+    private initGame = async (): Promise<void> => {
+        const { level } = this.state;
+        const result = await this.getBundledBordData();
+        if (!result) {
             return;
         }
-        const json = await result.json() as { board: string, solvedBoard: string };
+        // pick one from the result
+        const randomIndex = Math.floor(Math.random() * result.length);
+        const randomBoardData = result[randomIndex] as { board: string, solvedBoard: string };;
         // we should call the rest api to get the initialValues and solvedValues, keep the gameKeys
-        const solved = this.generateGrid(json.solvedBoard);
-        const initialValues = this.generateGrid(json.board);
+        const solved = this.generateGrid(randomBoardData.solvedBoard);
+        const initialValues = this.generateGrid(randomBoardData.board);
         const gameKey = + new Date()
         const initialMarkedDigits = this.generateGrid('');
         // console.log('>>> solved: ', solved);
@@ -200,6 +222,7 @@ class App extends React.Component<{}, AppState> {
             historyStack: [],
             historyIndex: 0,
             isDialogOpen: false,
+            level,
             markedDigits: initialMarkedDigits
         })
     }
@@ -249,6 +272,13 @@ class App extends React.Component<{}, AppState> {
         this.setState({ isFlagOn: !this.state.isFlagOn })
     }
 
+    private toggleLevel = (): void => {
+        const newLevel = this.state.level === 'easy' ? 'medium' : this.state.level === 'medium' ? 'hard' : 'easy'
+        this.setState({ level: newLevel }, () => {
+            this.initGame()
+        })
+    }
+
     render(): JSX.Element | null {
         const { mode, currentValues, digitChosen, gameKey, markedDigits, isDialogOpen, flags, isFlagOn } = this.state
 
@@ -263,6 +293,8 @@ class App extends React.Component<{}, AppState> {
                     showHelp={this.showHelp}
                     isFlagOn={isFlagOn}
                     toggleFlag={this.toggleFlag}
+                    level={this.state.level}
+                    toggleLevel={this.toggleLevel}
                 />
                 <Grid
                     key={gameKey}
@@ -297,7 +329,8 @@ class App extends React.Component<{}, AppState> {
 
                     <p>You can also use keyboard shortCuts to control the game</p>
                     <p>Press 1 to 9 to select what digit to fill in</p>
-                    <p>Press "Space" to swith the mode</p>
+                    <p>Use the Flag to help you mark the digit that you're not sure it's correct</p>
+                    <p>We have two modes: one is fill in the selected digit directly, another is mark the possible digits inside one cell. Press "Space" to swith the mode</p>
                 </MyDialog>
             </div>
         )

@@ -4,7 +4,7 @@ import { initializeDatabase, insertGridIntoDatabase } from './db_connector'
 async function main() {
     const dbPath = './sudoku.db'; // Path to your SQLite database file
     const db = await initializeDatabase(dbPath);
-    const clue = 35;
+    const clue = 10;
 
 
     for (let i = 0; i < 100; i++) {
