@@ -3,7 +3,7 @@ import { open } from 'sqlite';
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import { getRandomGridFromDatabase, getRandomGridByLevelFromDatabase, Level } from './dao/db_connector';
+import { getRandomGridFromDatabase, getRandomGridByLevelFromDatabase, Level, getBundleGridByLevelFromDatabase } from './dao/db_connector';
 
 const app = express();
 app.use(cors({
@@ -25,6 +25,26 @@ app.get('/get_grid', async (req, res) => {
         const result = await getRandomGridByLevelFromDatabase(db, level);
         return res.json(result);
     }
+});
+
+
+app.get('/get_bundled', async (req, res) => {
+    const db = await open({
+        filename: path.resolve(__dirname, './dao/sudoku.db'),
+        driver: sqlite3.Database
+    });
+    const resultMap: Record<Level, { board: string; solvedBoard: string }[]> = {
+        easy: [],
+        medium: [],
+        hard: []
+    };
+    for (const level of ['easy', 'medium', 'hard']) {
+        const result = await getBundleGridByLevelFromDatabase(db, level as Level, 10);
+        if (result) {
+            resultMap[level as Level] = result;
+        }
+    }
+    res.json(resultMap);
 });
 
 app.listen(port, () => {

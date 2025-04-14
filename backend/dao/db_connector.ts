@@ -137,6 +137,20 @@ export async function getRandomGridByLevelFromDatabase(db: Database, level: Leve
     }
 }
 
+export async function getBundleGridByLevelFromDatabase(db: Database, level: Level, count: number): Promise<{ board: string; solvedBoard: string }[]> {
+    const result = await db.all<{ grid_string: string, grid_solved_string: string }[]>(`
+        SELECT grid_string, grid_solved_string FROM sudoku_grids where clue = ? ORDER BY RANDOM() LIMIT ?
+    `, [levelMap[level] ?? 30, count]);
+    if (result) {
+        return result.map((row) => ({
+            board: row.grid_string,
+            solvedBoard: row.grid_solved_string
+        }));
+    } else {
+        return []; // Grid not found
+    }
+}
+
 
 // Example Usage (Node.js environment) -  You would typically run this in a Node.js script
 // async function main() {

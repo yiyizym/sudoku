@@ -181,7 +181,7 @@ class App extends React.Component<{}, AppState> {
             const parsedData = JSON.parse(data);
             return parsedData[level] || null;
         }
-        const result = await fetch(SERVICE_URL);
+        const result = await fetch(process.env.NODE_ENV === 'development' ? 'http://localhost:3001/get_bundled' : '/bundled.json');
         if (!result.ok) {
             return null;
         }
